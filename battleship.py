@@ -99,7 +99,7 @@ def checkShip(grid, ship):
         col = ship[i][1]        
         if grid[row][col] == EMPTY_UNCLICKED:
             count += 1
-            return count == 3
+    return count == 3
   #  if count != 3 :
    #     return False
    # else:
@@ -113,7 +113,28 @@ Parameters: 2D list of ints ; int
 Returns: 2D list of ints
 '''
 def addShips(grid, numShips):
-    return
+    count = 0
+    while count < numShips:
+        x = createShip()
+        if checkShip(grid,x) == True:
+            for i in x:
+                row = i[0]
+                col = i[1]
+                grid[row][col] = SHIP_UNCLICKED
+            count += 1
+   # print(grid) 
+    return grid
+           
+            
+
+        
+        
+    
+    
+        
+        
+        
+        
 
 
 '''
@@ -295,6 +316,6 @@ if __name__ == "__main__":
     test.testEmptyGrid()
     test.testCreateShip()
     test.testCheckShip()
-
+    test.testAddShips()
     ## Finally, run the simulation to test it manually ##
     # runSimulation(500, 500)
