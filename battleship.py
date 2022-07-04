@@ -25,7 +25,17 @@ Parameters: dict mapping strs to values
 Returns: None
 '''
 def makeModel(data):
-    return
+    data["rows"] = 10
+    data["cols"] = 10
+    data["board_size"] = 500 
+    data["cell_size"] = data["board_size"]/data["rows"]
+    data["ships"] = 5
+    data["computer"] = emptyGrid(data["rows"],data["cols"])
+    data["user"] = emptyGrid(data["rows"],data["cols"])
+    data["computer"] = addShips(data["computer"],data["ships"])
+    # data["user"] = addShips(data[computer],data[ships]  
+    
+    return 
 
 
 '''
@@ -62,7 +72,13 @@ Parameters: int ; int
 Returns: 2D list of ints
 '''
 def emptyGrid(rows, cols):
-    return
+    grid = []
+    for i in range(rows):
+        col = []
+        for j in range(cols):
+            col.append(EMPTY_UNCLICKED)
+        grid.append(col)    
+    return grid
 
 
 '''
@@ -71,8 +87,15 @@ Parameters: no parameters
 Returns: 2D list of ints
 '''
 def createShip():
-    return
-
+    row = random.randint(1,8)
+    col = random.randint(1,8)
+    hv = random.randint(0,1)
+    if hv == 0: 
+        ship = [[row,col-1],[row,col],[row,col+1]]   
+    else:
+        ship = [[row-1,col],[row,col],[row+1,col]]
+    return ship    
+    
 
 '''
 checkShip(grid, ship)
@@ -80,7 +103,18 @@ Parameters: 2D list of ints ; 2D list of ints
 Returns: bool
 '''
 def checkShip(grid, ship):
-    return
+    count = 0
+    for i in range(len(ship)):        
+        row = ship[i][0]
+        col = ship[i][1]        
+        if grid[row][col] == EMPTY_UNCLICKED:
+            count += 1
+    return count == 3
+  #  if count != 3 :
+   #     return False
+   # else:
+   #     return True
+        
 
 
 '''
@@ -89,7 +123,28 @@ Parameters: 2D list of ints ; int
 Returns: 2D list of ints
 '''
 def addShips(grid, numShips):
-    return
+    count = 0
+    while count < numShips:
+        x = createShip()
+        if checkShip(grid,x) == True:
+            for i in x:
+                row = i[0]
+                col = i[1]
+                grid[row][col] = SHIP_UNCLICKED
+            count += 1
+   # print(grid) 
+    return grid
+           
+            
+
+        
+        
+    
+    
+        
+        
+        
+        
 
 
 '''
@@ -268,6 +323,11 @@ def runSimulation(w, h):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-
+    test.testEmptyGrid()
+    test.testCreateShip()
+    test.testCheckShip()
+    test.testAddShips()
+    test.testMakeModel()
+    
     ## Finally, run the simulation to test it manually ##
     # runSimulation(500, 500)
