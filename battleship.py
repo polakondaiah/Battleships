@@ -161,15 +161,9 @@ def drawGrid(data, canvas, grid, showShips):
     for i in range(data["rows"]):
         for j in range(data["cols"]):
             if grid[i][j] == SHIP_UNCLICKED:
-               
                 canvas.create_rectangle(i*data["cell_size"], j*data["cell_size"], (i+1)*data["cell_size"], (j+1)*data["cell_size"], fill="yellow")
-               
             else:
                 canvas.create_rectangle(i*data["cell_size"], j*data["cell_size"], (i+1)*data["cell_size"], (j+1)*data["cell_size"], fill="blue")
-
-                        
-      
-      
     return
        
     
@@ -185,8 +179,15 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isVertical(ship):
-    return
-
+  #  for i in range(len(ship))
+    ship.sort()
+    if ship[0][1] == ship[1][1] and ship[1][1] == ship[2][1]:
+        if (ship[0][0]+1) == (ship[1][0]) and (ship[1][0]+1) == (ship[2][0]):
+            return True
+        else:
+            return False
+    else:
+        return False
 
 '''
 isHorizontal(ship)
@@ -194,7 +195,16 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isHorizontal(ship):
-    return
+    ship.sort()
+    if ship[0][0] == ship[1][0] and ship[1][0] == ship[2][0]:
+        if (ship[0][1]+1) == (ship[1][1]) and (ship[1][1]+1) == (ship[2][1]):
+            return True
+        else:
+            return False
+    else:
+        return False
+    
+   
 
 
 '''
@@ -349,7 +359,9 @@ if __name__ == "__main__":
     test.testCheckShip()
     test.testAddShips()
     test.testMakeModel()
-    test.testDrawGrid() 
+    test.testDrawGrid()
+    test.testIsVertical()
+    test.testIsHorizontal() 
     
     
     ## Finally, run the simulation to test it manually ##
