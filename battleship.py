@@ -4,6 +4,7 @@ Name:
 Roll No:
 """
 
+from sympy import jacobi
 import battleship_tests as test
 
 project = "Battleship" # don't edit this
@@ -31,7 +32,8 @@ def makeModel(data):
     data["cell_size"] = data["board_size"]/data["rows"]
     data["ships"] = 5
     data["computer"] = emptyGrid(data["rows"],data["cols"])
-    data["user"] = emptyGrid(data["rows"],data["cols"])
+  #  data["user"] = emptyGrid(data["rows"],data["cols"])
+    data["user"] = test.testGrid() 
     data["computer"] = addShips(data["computer"],data["ships"])
     # data["user"] = addShips(data[computer],data[ships]  
     
@@ -44,6 +46,9 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; Tkinter canvas
 Returns: None
 '''
 def makeView(data, userCanvas, compCanvas):
+    drawGrid(data, userCanvas, data["user"],True)
+    drawGrid(data, compCanvas, data["computer"],True)
+    
     return
 
 
@@ -153,7 +158,23 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; 2D list of ints ; boo
 Returns: None
 '''
 def drawGrid(data, canvas, grid, showShips):
+    for i in range(data["rows"]):
+        for j in range(data["cols"]):
+            if grid[i][j] == SHIP_UNCLICKED:
+               
+                canvas.create_rectangle(i*data["cell_size"], j*data["cell_size"], (i+1)*data["cell_size"], (j+1)*data["cell_size"], fill="yellow")
+               
+            else:
+                canvas.create_rectangle(i*data["cell_size"], j*data["cell_size"], (i+1)*data["cell_size"], (j+1)*data["cell_size"], fill="blue")
+
+                        
+      
+      
     return
+       
+    
+    
+    
 
 
 ### WEEK 2 ###
@@ -328,6 +349,8 @@ if __name__ == "__main__":
     test.testCheckShip()
     test.testAddShips()
     test.testMakeModel()
+    test.testDrawGrid() 
+    
     
     ## Finally, run the simulation to test it manually ##
-    # runSimulation(500, 500)
+    runSimulation(500, 500)
