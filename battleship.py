@@ -4,6 +4,7 @@ Name:
 Roll No:
 """
 
+from sympy import jacobi
 import battleship_tests as test
 
 project = "Battleship" # don't edit this
@@ -25,7 +26,18 @@ Parameters: dict mapping strs to values
 Returns: None
 '''
 def makeModel(data):
-    return
+    data["rows"] = 10
+    data["cols"] = 10
+    data["board_size"] = 500 
+    data["cell_size"] = data["board_size"]/data["rows"]
+    data["ships"] = 5
+    data["computer"] = emptyGrid(data["rows"],data["cols"])
+  #  data["user"] = emptyGrid(data["rows"],data["cols"])
+    data["user"] = test.testGrid() 
+    data["computer"] = addShips(data["computer"],data["ships"])
+    # data["user"] = addShips(data[computer],data[ships]  
+    
+    return 
 
 
 '''
@@ -34,6 +46,9 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; Tkinter canvas
 Returns: None
 '''
 def makeView(data, userCanvas, compCanvas):
+    drawGrid(data, userCanvas, data["user"],True)
+    drawGrid(data, compCanvas, data["computer"],True)
+    
     return
 
 
@@ -62,7 +77,13 @@ Parameters: int ; int
 Returns: 2D list of ints
 '''
 def emptyGrid(rows, cols):
-    return
+    grid = []
+    for i in range(rows):
+        col = []
+        for j in range(cols):
+            col.append(EMPTY_UNCLICKED)
+        grid.append(col)    
+    return grid
 
 
 '''
@@ -71,8 +92,15 @@ Parameters: no parameters
 Returns: 2D list of ints
 '''
 def createShip():
-    return
-
+    row = random.randint(1,8)
+    col = random.randint(1,8)
+    hv = random.randint(0,1)
+    if hv == 0: 
+        ship = [[row,col-1],[row,col],[row,col+1]]   
+    else:
+        ship = [[row-1,col],[row,col],[row+1,col]]
+    return ship    
+    
 
 '''
 checkShip(grid, ship)
@@ -80,7 +108,18 @@ Parameters: 2D list of ints ; 2D list of ints
 Returns: bool
 '''
 def checkShip(grid, ship):
-    return
+    count = 0
+    for i in range(len(ship)):        
+        row = ship[i][0]
+        col = ship[i][1]        
+        if grid[row][col] == EMPTY_UNCLICKED:
+            count += 1
+    return count == 3
+  #  if count != 3 :
+   #     return False
+   # else:
+   #     return True
+        
 
 
 '''
@@ -89,7 +128,28 @@ Parameters: 2D list of ints ; int
 Returns: 2D list of ints
 '''
 def addShips(grid, numShips):
-    return
+    count = 0
+    while count < numShips:
+        x = createShip()
+        if checkShip(grid,x) == True:
+            for i in x:
+                row = i[0]
+                col = i[1]
+                grid[row][col] = SHIP_UNCLICKED
+            count += 1
+   # print(grid) 
+    return grid
+           
+            
+
+        
+        
+    
+    
+        
+        
+        
+        
 
 
 '''
@@ -98,7 +158,17 @@ Parameters: dict mapping strs to values ; Tkinter canvas ; 2D list of ints ; boo
 Returns: None
 '''
 def drawGrid(data, canvas, grid, showShips):
+    for i in range(data["rows"]):
+        for j in range(data["cols"]):
+            if grid[i][j] == SHIP_UNCLICKED:
+                canvas.create_rectangle(i*data["cell_size"], j*data["cell_size"], (i+1)*data["cell_size"], (j+1)*data["cell_size"], fill="yellow")
+            else:
+                canvas.create_rectangle(i*data["cell_size"], j*data["cell_size"], (i+1)*data["cell_size"], (j+1)*data["cell_size"], fill="blue")
     return
+       
+    
+    
+    
 
 
 ### WEEK 2 ###
@@ -109,8 +179,15 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isVertical(ship):
-    return
-
+  #  for i in range(len(ship))
+    ship.sort()
+    if ship[0][1] == ship[1][1] and ship[1][1] == ship[2][1]:
+        if (ship[0][0]+1) == (ship[1][0]) and (ship[1][0]+1) == (ship[2][0]):
+            return True
+        else:
+            return False
+    else:
+        return False
 
 '''
 isHorizontal(ship)
@@ -118,7 +195,16 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isHorizontal(ship):
-    return
+    ship.sort()
+    if ship[0][0] == ship[1][0] and ship[1][0] == ship[2][0]:
+        if (ship[0][1]+1) == (ship[1][1]) and (ship[1][1]+1) == (ship[2][1]):
+            return True
+        else:
+            return False
+    else:
+        return False
+    
+   
 
 
 '''
@@ -268,6 +354,15 @@ def runSimulation(w, h):
 
 # This code runs the test cases to check your work
 if __name__ == "__main__":
-
+    test.testEmptyGrid()
+    test.testCreateShip()
+    test.testCheckShip()
+    test.testAddShips()
+    test.testMakeModel()
+    test.testDrawGrid()
+    test.testIsVertical()
+    test.testIsHorizontal() 
+    
+    
     ## Finally, run the simulation to test it manually ##
-    # runSimulation(500, 500)
+    runSimulation(500, 500)
