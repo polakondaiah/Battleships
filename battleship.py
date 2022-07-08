@@ -161,9 +161,9 @@ def drawGrid(data, canvas, grid, showShips):
     for i in range(data["rows"]):
         for j in range(data["cols"]):
             if grid[i][j] == SHIP_UNCLICKED:
-                canvas.create_rectangle(i*data["cell_size"], j*data["cell_size"], (i+1)*data["cell_size"], (j+1)*data["cell_size"], fill="yellow")
+                canvas.create_rectangle(j*data["cell_size"], i*data["cell_size"], (j+1)*data["cell_size"], (i+1)*data["cell_size"], fill="yellow")
             else:
-                canvas.create_rectangle(i*data["cell_size"], j*data["cell_size"], (i+1)*data["cell_size"], (j+1)*data["cell_size"], fill="blue")
+                canvas.create_rectangle(j*data["cell_size"], i*data["cell_size"], (j+1)*data["cell_size"], (i+1)*data["cell_size"], fill="blue")
     return
        
     
@@ -213,9 +213,10 @@ Parameters: dict mapping strs to values ; mouse event object
 Returns: list of ints
 '''
 def getClickedCell(data, event):
-    return
+     # print([int(event.y//data["cell_size"]),int(event.x//data["cell_size"])])
+    return [int(event.y//data["cell_size"]),int(event.x//data["cell_size"])]
 
-
+ 
 '''
 drawShip(data, canvas, ship)
 Parameters: dict mapping strs to values ; Tkinter canvas; 2D list of ints
@@ -324,6 +325,7 @@ def runSimulation(w, h):
 
     root = Tk()
     root.resizable(width=False, height=False) # prevents resizing window
+    root.title('BattleShip')
 
     # We need two canvases - one for the user, one for the computer
     Label(root, text = "USER BOARD - click cells to place ships on your board.").pack()
@@ -362,6 +364,7 @@ if __name__ == "__main__":
     test.testDrawGrid()
     test.testIsVertical()
     test.testIsHorizontal() 
+    test.testGetClickedCell()
     
     
     ## Finally, run the simulation to test it manually ##
