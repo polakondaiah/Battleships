@@ -39,7 +39,7 @@ def makeModel(data):
  #   data["user"] = test.testGrid() 
     data["computer"] = addShips(data["computer"],data["ships"])
     # data["user"] = addShips(data[computer],data[ships]  
-    data["winner"] = "comp"
+    data["winner"] = None
     data["max_turns"] = 50
     data["cur_turns"] = 0
 
@@ -66,7 +66,20 @@ Parameters: dict mapping strs to values ; key event object
 Returns: None
 '''
 def keyPressed(data, event):
-    pass
+ #   print(event)
+ #   print(event.keycode)
+   # data["user"].bind('<Return>', 
+    if event.keycode == 13:
+        makeModel(data)
+       
+   # a = event
+   # if a == "<KeyPress event send_event=True keysym=Return keycode=13 char='\r' x=361 y=75>":
+   # if a == 13 :
+   #    
+ #   event("<Return>",makeModel(data))
+  #  
+   # pass
+    return
 
 
 '''
@@ -289,7 +302,7 @@ def placeShip(data):
             data["user"][f][s] = SHIP_UNCLICKED
         data["user_ships"] += 1
     else:
-        print("Ship is not valid")
+        print("Ship is not valid, click three locations in a row (horizontal or vertical) to make a ship")
     data["t_ship"] = []   
     return
 
@@ -301,7 +314,7 @@ Returns: None
 '''
 def clickUserBoard(data, row, col):
     if data["user_ships"] == 5:
-        print("you can start the game")
+        print("ALL Ships placed, Now you can start the game by guessing in the computer board" )
         return
     for i in data["t_ship"]:
         if (row,col)==i:
@@ -402,12 +415,16 @@ Returns: None
 def drawGameOver(data, canvas):
     if data["winner"] == "user":
         canvas.create_text(220,170, text="Dear user, you won game", fill ="green", font ='Helvetica 25 bold')
+        canvas.create_text(220,220, text="press Enter to restart the game", fill ="black", font ='Helvetica 20 bold')
     elif data["winner"] == "comp":
         canvas.create_text(220,170, text="Dear user, you lost game", fill ="red", font ='Helvetica 25 bold')
+        canvas.create_text(220,220, text="press Enter to restart the game", fill ="green", font ='Helvetica 20 bold')
     elif data["winner"] == "draw":
         canvas.create_text(220,170, text="Dear user, you are out of moves and have reached a draw", fill ="black", font ='Helvetica 12 bold')
-    
-    
+        canvas.create_text(220,220, text="press Enter to restart the game", fill ="green", font ='Helvetica 20 bold')
+ #   else:
+  #      canvas.create_text(220,170, text="press Enter to restart the game.", fill ="red", font ='Helvetica 25 bold')
+   
         
     return
 
