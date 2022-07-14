@@ -39,8 +39,10 @@ def makeModel(data):
  #   data["user"] = test.testGrid() 
     data["computer"] = addShips(data["computer"],data["ships"])
     # data["user"] = addShips(data[computer],data[ships]  
-    data["winner"] = None
-    
+    data["winner"] = "comp"
+    data["max_turns"] = 50
+    data["cur_turns"] = 0
+
     return 
 
 
@@ -349,12 +351,17 @@ Parameters: dict mapping strs to values ; int ; int
 Returns: None
 '''
 def runGameTurn(data, row, col):
-    if data["computer"][row][col]==SHIP_CLICKED or data["computer"][row][col]==EMPTY_CLICKED:
-        return 
+    if data["cur_turns"] <= data["max_turns"]:    
+        if data["computer"][row][col]==SHIP_CLICKED or data["computer"][row][col]==EMPTY_CLICKED:
+            return 
+        else:
+            updateBoard(data,data["computer"],row,col,"user")
+        row,col=getComputerGuess(data["user"])
+        updateBoard(data,data["user"],row,col,"comp")
+        data["cur_turns"] += 1
     else:
-        updateBoard(data,data["computer"],row,col,"user")
-    row,col=getComputerGuess(data["user"])
-    updateBoard(data,data["user"],row,col,"comp")
+        data["winner"] = "draw"
+    
        
         
 
@@ -394,9 +401,12 @@ Returns: None
 '''
 def drawGameOver(data, canvas):
     if data["winner"] == "user":
-        canvas.create_text(220,200, text="Dear user, you won game", fill ="black", font ='Helvetica 25 bold')
+        canvas.create_text(220,170, text="Dear user, you won game", fill ="green", font ='Helvetica 25 bold')
     elif data["winner"] == "comp":
-        canvas.create_text(220,200, text="Dear user, you lost game", fill ="black", font ='Helvetica 25 bold')
+        canvas.create_text(220,170, text="Dear user, you lost game", fill ="red", font ='Helvetica 25 bold')
+    elif data["winner"] == "draw":
+        canvas.create_text(220,170, text="Dear user, you are out of moves and have reached a draw", fill ="black", font ='Helvetica 12 bold')
+    
     
         
     return
