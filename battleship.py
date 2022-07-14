@@ -348,6 +348,10 @@ def runGameTurn(data, row, col):
         return 
     else:
         updateBoard(data,data["computer"],row,col,"user")
+    row,col=getComputerGuess(data["user"])
+    updateBoard(data,data["user"],row,col,"comp")
+       
+        
 
 '''
 getComputerGuess(board)
@@ -355,7 +359,13 @@ Parameters: 2D list of ints
 Returns: list of ints
 '''
 def getComputerGuess(board):
-    return
+    
+    while True:
+        x =random.randint(0,9)
+        y =random.randint(0,9)
+        if board[x][y] == EMPTY_UNCLICKED or board[x][y] == SHIP_UNCLICKED:
+    
+            return [x,y]
 
 
 '''
@@ -444,6 +454,7 @@ if __name__ == "__main__":
     test.testDrawShip()
     test.testShipIsValid()
     test.testUpdateBoard()
+    test.testGetComputerGuess()
   
     
     
