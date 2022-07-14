@@ -39,6 +39,7 @@ def makeModel(data):
  #   data["user"] = test.testGrid() 
     data["computer"] = addShips(data["computer"],data["ships"])
     # data["user"] = addShips(data[computer],data[ships]  
+    data["winner"] = None
     
     return 
 
@@ -52,6 +53,7 @@ def makeView(data, userCanvas, compCanvas):
     drawGrid(data, userCanvas, data["user"],True)
     drawGrid(data, compCanvas, data["computer"],False)
     drawShip(data,userCanvas,data["t_ship"])
+    drawGameOver(data,userCanvas)
     
     return
 
@@ -71,15 +73,16 @@ Parameters: dict mapping strs to values ; mouse event object ; 2D list of ints
 Returns: None
 '''
 def mousePressed(data, event, board):
-    cell = getClickedCell(data,event)
-    if board == "user":
-        clickUserBoard(data, cell[0],cell[1])
-   # elif board =="comp":
-    else:    
-        runGameTurn(data, cell[0],cell[1])
+    if data["winner"] == None:
+        cell = getClickedCell(data,event)
+        if board == "user":
+            clickUserBoard(data, cell[0],cell[1])
+    # elif board =="comp":
+        else:    
+            runGameTurn(data, cell[0],cell[1])
     
     #data["compuper"](cell[0],cell[1])
-        
+    return    
     
     
   #  pass
@@ -333,8 +336,10 @@ def updateBoard(data, board, row, col, player):
     elif board[row][col]==EMPTY_UNCLICKED:
         board[row][col]=EMPTY_CLICKED
         
-        
-    
+    if isGameOver(board):
+      #  player = data["winner"]    
+        data["winner"] = player
+
     return
 
 
@@ -374,7 +379,12 @@ Parameters: 2D list of ints
 Returns: bool
 '''
 def isGameOver(board):
-    return
+    for row in range(len(board)):
+        for col in range(len(board)):
+            if board[row][col] == SHIP_UNCLICKED:
+                return False
+    
+    return True
 
 
 '''
@@ -383,6 +393,12 @@ Parameters: dict mapping strs to values ; Tkinter canvas
 Returns: None
 '''
 def drawGameOver(data, canvas):
+    if data["winner"] == "user":
+        canvas.create_text(220,200, text="Dear user, you won game", fill ="black", font ='Helvetica 25 bold')
+    elif data["winner"] == "comp":
+        canvas.create_text(220,200, text="Dear user, you lost game", fill ="black", font ='Helvetica 25 bold')
+    
+        
     return
 
 
@@ -455,6 +471,7 @@ if __name__ == "__main__":
     test.testShipIsValid()
     test.testUpdateBoard()
     test.testGetComputerGuess()
+    test.testIsGameOver()
   
     
     
